@@ -13,13 +13,14 @@
 #ifndef HUNTECH26A2_H_
 #define HUNTECH26A2_H_
 #include "wet2util.h"
-
+#include "AVLRankTree.h"
+#include "HashTable.h"
+#include "ReverseTree.h"
+#include "Squad.h"
 
 class Huntech {
 private:
-    //
-    // Here you may add anything you need to implement your Huntech class
-    //
+
 
 public:
     // <DO-NOT-MODIFY> {

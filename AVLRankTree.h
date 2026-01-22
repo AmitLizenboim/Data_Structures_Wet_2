@@ -18,7 +18,7 @@ struct Node {
         height(1), rank(rank) {} // O(1)
 };
 
-template <class T>
+template <class T,class S>
 class AVLTree {
 private:
     Node<T>* root = nullptr;
@@ -113,7 +113,7 @@ private:
         return C;
     }
 
-    Node<T>* find(int key, Node<T>* node) {
+    Node<T>* find(S &key, Node<T>* node) {
         // AVL search implementation, O(log(Nodes in the tree))
         if (node == nullptr)
             return nullptr;
@@ -125,16 +125,16 @@ private:
         return node;
     }
 
-    Node<T>* insert(T* data, int key, int value, Node<T>* node) {
+    Node<T>* insert(T* data, S &key, Node<T>* node) {
         // AVL insertion implementation, O(log(Nodes in the tree))
         if (node == nullptr)
             return node;
         if (*node->data > key)
-            if(insert(data, key, value, node->left) == nullptr)
-                node->left = new Node<T>(data, value);
+            if(insert(data, key, node->left) == nullptr)
+                node->left = new Node<T>(data);
         if (*node->data < key)
-            if(insert(data, key, value, node->right) == nullptr)
-                node->right = new Node<T>(data, value);
+            if(insert(data, key, node->right) == nullptr)
+                node->right = new Node<T>(data);
         // updating Node
         updateNode(node);
         // balancing tree
@@ -155,7 +155,7 @@ private:
         return node;
     }
 
-    Node<T>* remove(int key, Node<T>* node) {
+    Node<T>* remove(S &key, Node<T>* node) {
         // AVL removal implementation, O(log(Nodes in the tree))
         if (node == nullptr)
             return node;
@@ -223,22 +223,22 @@ public:
         return root == nullptr;
     }
 
-    T* find(int key) {
+    T* find(S &key) {
         // AVL search implementation, O(log(Nodes in the tree))
         Node<T>* node = find(key, root);
         return node ? node->data : nullptr;
     }
 
-    Node<T>* insert(T* data, int key, int value) {
+    Node<T>* insert(T* data, S &key) {
         // AVL insertion implementation, O(log(Nodes in the tree))
         if (root == nullptr) {
-            root = new Node<T>(data, value);
+            root = new Node<T>(data);
             return root;
         }
-        return insert(data, key, value, root);
+        return insert(data, key, root);
     }
 
-    Node<T>* remove(int key) {
+    Node<T>* remove(S &key) {
         // AVL removal implementation, O(log(Nodes in the tree))
         if (root == nullptr) {
             return root;
