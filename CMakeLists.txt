@@ -11,4 +11,5 @@ add_executable(wet2_run
         ReverseTree.h
         wet2util.h
         Squad.h
+        Squad.cpp
 )

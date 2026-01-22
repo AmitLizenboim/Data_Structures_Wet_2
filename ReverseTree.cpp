@@ -10,6 +10,9 @@ ReverseTree::~ReverseTree() {
     delete sumNenAbility;
 }
 HunterNode* ReverseTree::insert(const NenAbility &nenAbility, int fightsHad) {
+    if (!nenAbility.isValid() || fightsHad <0) {
+        return nullptr;
+    }
     HunterNode* newNode = new HunterNode(nenAbility, fightsHad, root);
     size++;
     *newNode->bonusNenAbility += *sumNenAbility;
@@ -40,12 +43,23 @@ ReverseTree* ReverseTree::Union(ReverseTree &other) {
     return this;
 }
 void ReverseTree::die() {
-    root ->alive = false;
+    if (root != nullptr) {
+        root ->alive = false;
+    }
 }
+
+void ReverseTree::fight() {
+    if (root != nullptr) {
+        root ->bonusFights ++;
+    }
+}
+
 
 bool ReverseTree::isEmpty() {
     return (root == nullptr);
 }
+
+NenAbility* ReverseTree::getTotalNenAbility() {return sumNenAbility;}
 
 void pathCompression(HunterNode *hunter, HunterNode *root) {
     if (hunter == nullptr || hunter == root || hunter->parent == root) {

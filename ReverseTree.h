@@ -32,7 +32,9 @@ class ReverseTree {
 		HunterNode* insert(const NenAbility &nenAbility, int fightsHad);
 		ReverseTree* Union(ReverseTree &other);
 		void die();
+		void fight();
 		bool isEmpty();
+		NenAbility* getTotalNenAbility();
 };
 
 int findFights(HunterNode *hunter);
