@@ -47,6 +47,7 @@ public:
     bool operator<(int key);
     bool operator>(int key);
     int getExperience();
+    AuraSquad* getAuraSquad();
     HunterNode* addHunter(const NenAbility &nenAbility, int fightsHad,int aura);
     bool forceJoin(Squad &other);
     int duel(Squad &other);

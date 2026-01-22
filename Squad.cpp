@@ -16,6 +16,8 @@ bool Squad::operator>(int key) {
 }
 int Squad::getExperience() {return experience;}
 
+AuraSquad* Squad::getAuraSquad() {return auraSquad;}
+
 HunterNode* Squad::addHunter(const NenAbility &nenAbility, int fightsHad,int aura) {
     if (aura < 0) {
         return nullptr;
