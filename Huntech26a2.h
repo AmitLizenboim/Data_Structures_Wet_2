@@ -20,7 +20,9 @@
 
 class Huntech {
 private:
-
+    HashTable<HunterNode>* huntersTable;
+    AVLTree<Squad,int>* squads;
+    AVLTree<AuraSquad,AuraSquad>* auraSquads;
 
 public:
     // <DO-NOT-MODIFY> {
