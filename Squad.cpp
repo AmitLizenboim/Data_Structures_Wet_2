@@ -5,7 +5,7 @@
 
 Squad::Squad(int squadID) : auraSquad(new AuraSquad(squadID)), experience(0), hunters(new ReverseTree()) {}
 Squad::~Squad() {
-    auraSquad = nullptr;
+    delete auraSquad;
     delete hunters;
 }
 bool Squad::operator<(int key) {
