@@ -4,10 +4,7 @@
 #include "Squad.h"
 
 Squad::Squad(int squadID) : auraSquad(new AuraSquad(squadID)), experience(0), hunters(new ReverseTree()) {}
-Squad::~Squad() {
-    auraSquad = nullptr;
-    delete hunters;
-}
+
 bool Squad::operator<(int key) {
     return auraSquad->getSquadID() < key;
 }
@@ -26,21 +23,21 @@ HunterNode* Squad::addHunter(const NenAbility &nenAbility, int fightsHad,int aur
     if (hunter == nullptr) {
         return nullptr;
     }
-    auraSquad -> addAura(aura);
+    auraSquad->addAura(aura);
     return hunter;
 }
-bool Squad::forceJoin(Squad &other) {
+bool Squad::forceJoin(Squad &other) { // function unites the other squad - O(1)
     if (isEmpty() || (experience + auraSquad->getTotalAura() + hunters->getTotalNenAbility()->getEffectiveNenAbility())
         <=  (other.experience + other.auraSquad->getTotalAura() +
             other.hunters->getTotalNenAbility()->getEffectiveNenAbility())) {
             return false;
     }
-    hunters -> Union(*other.hunters);
+    hunters->Union(*other.hunters);
     experience += other.getExperience();
     auraSquad->addAura(other.auraSquad->getTotalAura());
     return true;
 }
-int Squad::duel(Squad &other) {
+int Squad::duel(Squad &other) { // function for squad duel - O(1)
     if (isEmpty() || other.isEmpty()) {
         return -1;
     }
@@ -51,10 +48,10 @@ int Squad::duel(Squad &other) {
     if (effectiveAura > otherEffectiveAura) {
         experience += 3;
         return 1;
-    }else if (effectiveAura < otherEffectiveAura) {
+    } else if (effectiveAura < otherEffectiveAura) {
         other.experience += 3;
         return 3;
-    }else {
+    } else {
         if (hunters->getTotalNenAbility() > other.hunters->getTotalNenAbility()) {
             experience += 3;
             return 2;
@@ -68,9 +65,9 @@ int Squad::duel(Squad &other) {
     }
 }
 
-void Squad::die() {
+void Squad::die() { // O(1)
     hunters->die();
 }
-bool Squad::isEmpty() {
+bool Squad::isEmpty() { // O(1)
     return hunters->isEmpty();
 }

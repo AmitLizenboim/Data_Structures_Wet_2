@@ -13,15 +13,15 @@ private:
 public:
     AuraSquad(int squadID) : squadID(squadID), totalAura(0) {}
     ~AuraSquad() = default;
-    AuraSquad(const AuraSquad&) = default;
-    AuraSquad& operator=(const AuraSquad&) = default;
-    bool operator<(AuraSquad &other) {
+    AuraSquad(const AuraSquad& other) = default;
+    AuraSquad& operator=(const AuraSquad& other) = default;
+    bool operator<(AuraSquad &other) { // O(1)
         if (totalAura == other.totalAura) {
             return squadID < other.squadID;
         }
         return totalAura < other.totalAura;
     }
-    bool operator>(AuraSquad &other) {
+    bool operator>(AuraSquad &other) { // O(1)
         if (totalAura == other.totalAura) {
             return squadID > other.squadID;
         }
@@ -29,19 +29,19 @@ public:
     }
     const int getSquadID() {return squadID;}
     int getTotalAura() {return totalAura;}
-    void addAura(int aura) {
+    void addAura(int aura) { // O(1)
         totalAura += aura;
     }
 };
 
-class Squad{
+class Squad {
 private:
     AuraSquad* auraSquad;
     int experience;
     ReverseTree* hunters;
 public:
     Squad(int squadID);
-    ~Squad();
+    ~Squad() = default;
     Squad(const Squad&) = delete;
     Squad& operator=(const Squad&) = delete;
     bool operator<(int key);
@@ -54,8 +54,5 @@ public:
     void die();
     bool isEmpty();
 };
-
-
-
 
 #endif //DATASTRUCTURES_WET2_SQUAD_H
