@@ -34,6 +34,7 @@ class ReverseTree {
 		void die();
 		void fight();
 		bool isEmpty();
+		bool isAlive();
 		NenAbility* getTotalNenAbility();
 };
 

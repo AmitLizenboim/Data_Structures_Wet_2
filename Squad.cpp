@@ -3,24 +3,24 @@
 //
 #include "Squad.h"
 
-Squad::Squad(int squadID) : auraSquad(new AuraSquad(squadID)), experience(0), hunters(new ReverseTree()) {
+Squad::Squad(int squadID) : auraSquad(new AuraSquad(squadID)), experience(0), hunters(new ReverseTree()) {} // O(1)
 
-Squad::~Squad() {
+Squad::~Squad() { // O(1)
     delete auraSquad;
     delete hunters;
 }
->>>>>>> 6b9a2500c53fbcbc1fd0e0a08731e539836cf9ce
-bool Squad::operator<(int key) {
+bool Squad::operator<(int key) { // O(1)
     return auraSquad->getSquadID() < key;
 }
-bool Squad::operator>(int key) {
+bool Squad::operator>(int key) { // O(1)
     return auraSquad->getSquadID() > key;
 }
-int Squad::getExperience() {return experience;}
-
-AuraSquad* Squad::getAuraSquad() {return auraSquad;}
+AuraSquad* Squad::getAuraSquad() {return auraSquad;} // O(1)
+int Squad::getExperience() {return experience;} // O(1)
+ReverseTree* Squad::getHunters() {return hunters;} // O(1)
 
 HunterNode* Squad::addHunter(const NenAbility &nenAbility, int fightsHad,int aura) {
+    // function adds the hunter to the tree - O(1)
     if (aura < 0) {
         return nullptr;
     }

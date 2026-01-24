@@ -65,6 +65,12 @@ bool ReverseTree::isEmpty() { // function returns true if the tree is empty - O(
     return (root == nullptr);
 }
 
+bool ReverseTree::isAlive() {
+    return root->alive;
+}
+
+isAlive() { return root->alive; }
+
 NenAbility* ReverseTree::getTotalNenAbility() { // function returns the squad's NenAbility - O(1)
     return sumNenAbility;
 }

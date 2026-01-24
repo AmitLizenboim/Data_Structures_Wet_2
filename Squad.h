@@ -41,13 +41,14 @@ private:
     ReverseTree* hunters;
 public:
     Squad(int squadID);
-    ~Squad() = default;
+    ~Squad();
     Squad(const Squad&) = delete;
     Squad& operator=(const Squad&) = delete;
     bool operator<(int key);
     bool operator>(int key);
-    int getExperience();
     AuraSquad* getAuraSquad();
+    int getExperience();
+    ReverseTree* getHunters();
     HunterNode* addHunter(const NenAbility &nenAbility, int fightsHad,int aura);
     bool forceJoin(Squad &other);
     int duel(Squad &other);
