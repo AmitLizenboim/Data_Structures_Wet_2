@@ -37,6 +37,7 @@ public:
     ~HashTable() { // O(n)
         for (int i = 0; i < capacity; i++) {
             if (table[i] != nullptr) {
+                delete table[i] -> data;
                 delete table[i];
             }
         }
