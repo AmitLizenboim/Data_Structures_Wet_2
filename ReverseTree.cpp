@@ -4,7 +4,7 @@
 
 #include "ReverseTree.h"
 
-ReverseTree::ReverseTree() : root(nullptr), size(0), sumNenAbility(new NenAbility(NenAbility::zero())) {}
+ReverseTree::ReverseTree() : root(nullptr), size(0), sumNenAbility(new NenAbility()) {}
 
 ReverseTree::~ReverseTree() {
     root = nullptr;

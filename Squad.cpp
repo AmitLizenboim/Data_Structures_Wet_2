@@ -57,10 +57,10 @@ int Squad::duel(Squad &other) { // function for squad duel - O(1)
         other.experience += 3;
         return 3;
     } else {
-        if (hunters->getTotalNenAbility() > other.hunters->getTotalNenAbility()) {
+        if (*hunters->getTotalNenAbility() > *other.hunters->getTotalNenAbility()) {
             experience += 3;
             return 2;
-        }else if (hunters->getTotalNenAbility() < other.hunters->getTotalNenAbility()) {
+        }else if (*hunters->getTotalNenAbility() < *other.hunters->getTotalNenAbility()) {
             other.experience += 3;
             return 4;
         }
