@@ -22,8 +22,7 @@ HunterNode* ReverseTree::insert(const NenAbility &nenAbility, int fightsHad) {
     if (root != nullptr) {
         *newNode->bonusNenAbility -= *root->bonusNenAbility;
         newNode->bonusFights -= root->bonusFights;
-    }
-    else {
+    }else {
         root = newNode;
     }
     *sumNenAbility += nenAbility;

@@ -13,9 +13,12 @@ struct HunterNode {
 	NenAbility *bonusNenAbility;
 	bool alive;
 
-	HunterNode(const NenAbility &nenAbility, int fightsHad, HunterNode *parent): nenAbility(&nenAbility),fightsHad(fightsHad),
-	parent(parent), bonusFights(0), bonusNenAbility(new NenAbility(NenAbility::zero())), alive(true) {} // O(1)
-	~HunterNode() = default; // O(1)
+	HunterNode(const NenAbility &nenAbility, int fightsHad, HunterNode *parent): nenAbility(new NenAbility(nenAbility))
+	,fightsHad(fightsHad),parent(parent), bonusFights(0), bonusNenAbility(new NenAbility()), alive(true) {} // O(1)
+	~HunterNode() {
+		delete nenAbility;
+		delete bonusNenAbility;
+	}// O(1)
 };
 
 class ReverseTree {
