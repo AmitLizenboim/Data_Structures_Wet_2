@@ -31,7 +31,6 @@ StatusType Huntech::add_squad(int squadId) { // O(log(k))
         squads->insert(squadToInsert, squadId); // AVL insertion
     }
     catch (const std::bad_alloc&) {
-
         delete squadToInsert;
         return StatusType::ALLOCATION_ERROR; // failed to create node
     }
@@ -39,7 +38,13 @@ StatusType Huntech::add_squad(int squadId) { // O(log(k))
         auraSquads->insert(squadToInsert->getAuraSquad(), *squadToInsert->getAuraSquad()); // AVL insertion
     }
     catch (const std::bad_alloc&) {
-        squads->remove(squadId);
+        try {
+            squads->remove(squadId);
+        }
+        catch (const std::bad_alloc&) {
+            delete squadToInsert;
+            return StatusType::ALLOCATION_ERROR; // failed to create node
+        }
         delete squadToInsert;
         return StatusType::ALLOCATION_ERROR; // failed to create node
     }
@@ -87,43 +92,23 @@ StatusType Huntech::add_hunter(int hunterId,
     if(huntersTable->find(hunterId) != nullptr || squadToInsert == nullptr) {
         return StatusType::FAILURE; // hunter already in system or squad not in system
     }
-    HunterNode* hunterToInsert = squadToInsert->addHunter(nenType, fightsHad, aura);
     try {
-        hunterToInsert = new HunterNode(nenType, fightsHad, nullptr);
+        auraSquads->remove(*squadToInsert->getAuraSquad());
     }
     catch (const std::bad_alloc&) {
         return StatusType::ALLOCATION_ERROR; // memory allocation failed
     }
+    HunterNode* hunterToInsert;
     try {
-        huntersTable->insert(hunterId, hunterToInsert);
+        hunterToInsert = squadToInsert->addHunter(nenType, fightsHad, aura);
     }
     catch (const std::bad_alloc&) {
-        delete hunterToInsert;
-        return StatusType::ALLOCATION_ERROR; // memory allocation failed
-    }
-    auraSquads->remove(*squadToInsert->getAuraSquad());
-    squadToInsert->addHunter(nenType, fightsHad, aura);
-    auraSquads->insert(squadToInsert->getAuraSquad(), *squadToInsert->getAuraSquad());
-
-
-    if (hunterToInsert == nullptr) {
-        auraSquads->insert(squadToInsert->getAuraSquad(), *squadToInsert->getAuraSquad());
-        return StatusType::ALLOCATION_ERROR; // memory allocation failed
-    }
-    try {
-        huntersTable->insert(hunterId, hunterToInsert);
-    }
-    catch (const std::bad_alloc&) {
-        squadToInsert->getAuraSquad()->addAura(-aura);
-        auraSquads->insert(squadToInsert->getAuraSquad(), *squadToInsert->getAuraSquad());
-        delete hunterToInsert;
         return StatusType::ALLOCATION_ERROR; // memory allocation failed
     }
     try {
         auraSquads->insert(squadToInsert->getAuraSquad(),*squadToInsert->getAuraSquad());
     }
     catch (const std::bad_alloc&) {
-        huntersTable.
         delete hunterToInsert;
         return StatusType::ALLOCATION_ERROR; // memory allocation failed
     }
