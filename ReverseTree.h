@@ -30,6 +30,7 @@ class ReverseTree {
 		ReverseTree(const ReverseTree &other) = delete;
 		ReverseTree &operator=(const ReverseTree &other) = delete;
 		HunterNode* insert(const NenAbility &nenAbility, int fightsHad);
+		void pop();
 		ReverseTree* Union(ReverseTree &other);
 		void die();
 		void fight();

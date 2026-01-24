@@ -86,9 +86,30 @@ StatusType Huntech::add_hunter(int hunterId,
         return StatusType::FAILURE; // hunter already in system or squad not in system
     }
     try {
-        squadToInsert->addHunter(nenType, fightsHad, aura);
+        auraSquads->remove(*squadToInsert->getAuraSquad());
     }
     catch (const std::bad_alloc&) {
+        return StatusType::ALLOCATION_ERROR; // memory allocation failed
+    }
+    HunterNode* hunterToInsert;
+    try {
+        hunterToInsert = squadToInsert->addHunter(nenType, fightsHad, aura);
+    }
+    catch (const std::bad_alloc&) {
+        return StatusType::ALLOCATION_ERROR; // memory allocation failed
+    }
+    try {
+        auraSquads->insert(squadToInsert->getAuraSquad(),*squadToInsert->getAuraSquad());
+    }
+    catch (const std::bad_alloc&) {
+        delete hunterToInsert;
+        return StatusType::ALLOCATION_ERROR; // memory allocation failed
+    }
+    try {
+        huntersTable->insert(hunterId, hunterToInsert);
+    }
+    catch (const std::bad_alloc&) {
+        delete hunterToInsert;
         return StatusType::ALLOCATION_ERROR; // memory allocation failed
     }
     return StatusType::SUCCESS;
