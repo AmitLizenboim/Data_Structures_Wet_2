@@ -65,12 +65,6 @@ bool ReverseTree::isEmpty() { // function returns true if the tree is empty - O(
     return (root == nullptr);
 }
 
-bool ReverseTree::isAlive() {
-    return root->alive;
-}
-
-isAlive() { return root->alive; }
-
 NenAbility* ReverseTree::getTotalNenAbility() { // function returns the squad's NenAbility - O(1)
     return sumNenAbility;
 }
@@ -83,6 +77,7 @@ void pathCompression(HunterNode *hunter, HunterNode *root) {
     pathCompression(hunter->parent, root);
     hunter->bonusFights += hunter->parent->bonusFights;
     *hunter->bonusNenAbility += *hunter->parent->bonusNenAbility;
+    hunter->alive = (hunter->alive && hunter->parent->alive);
     hunter->parent = root;
 }
 
@@ -108,6 +103,15 @@ int findFights(HunterNode *hunter) {
     }
     return hunter->fightsHad + hunter->bonusFights + hunter->parent->bonusFights;
 }
+
+bool findLife(HunterNode *hunter) {
+    if (hunter == nullptr) {
+        return false;
+    }
+    pathCompression(hunter, findRoot(hunter));
+    return (hunter->alive && hunter->parent->alive);
+}
+
 
 NenAbility findPartialNenAbility(HunterNode *hunter) {
     // function returns the total NenAbility up to hunter by chronological order

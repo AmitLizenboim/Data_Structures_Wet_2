@@ -30,16 +30,15 @@ class ReverseTree {
 		ReverseTree(const ReverseTree &other) = delete;
 		ReverseTree &operator=(const ReverseTree &other) = delete;
 		HunterNode* insert(const NenAbility &nenAbility, int fightsHad);
-		void pop();
 		ReverseTree* Union(ReverseTree &other);
 		void die();
 		void fight();
 		bool isEmpty();
-		bool isAlive();
 		NenAbility* getTotalNenAbility();
 };
 
 int findFights(HunterNode *hunter);
+bool findLife(HunterNode *hunter);
 NenAbility findPartialNenAbility(HunterNode *hunter);
 
 #endif //DATA_STRUCTURES_WET_2_REVERSE_TREE_H
