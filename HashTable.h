@@ -6,6 +6,10 @@
 #pragma once
 
 enum state {EMPTY, OCCUPIED}; // for the state of the Nodes in the array
+// list of primes for hashtable capacities
+static inline constexpr int primeList[] = {101, 211, 431, 863, 1741, 3491, 6983, 13967, 27941, 55897,
+111799, 223603, 447209, 894427, 1788859, 3577721, 7155461, 14310929, 28621871, 57243761,
+114487529, 228975071, 457950151, 915900307, 1831800623};
 
 template <class T>
 struct HashNode {
@@ -24,10 +28,6 @@ template <class T>
 class HashTable {
 private:
     HashNode<T>** table;
-    // list of primes for hashtable capacities
-    static constexpr int primeList[] = {101, 211, 431, 863, 1741, 3491, 6983, 13967, 27941, 55897,
-    111799, 223603, 447209, 894427, 1788859, 3577721, 7155461, 14310929, 28621871, 57243761,
-    114487529, 228975071, 457950151, 915900307, 1831800623};
     int size; // holds the current number of Nodes in the table
     int capacity; // holds the current length of the table
     int primeIndex; // holds the index of the current capacity in the array of primes
@@ -39,7 +39,6 @@ public:
     ~HashTable() { // O(n)
         for (int i = 0; i < capacity; i++) {
             if (table[i] != nullptr) {
-                delete table[i] -> data;
                 delete table[i];
             }
         }

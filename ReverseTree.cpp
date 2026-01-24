@@ -23,6 +23,9 @@ HunterNode* ReverseTree::insert(const NenAbility &nenAbility, int fightsHad) {
         *newNode->bonusNenAbility -= *root->bonusNenAbility;
         newNode->bonusFights -= root->bonusFights;
     }
+    else {
+        root = newNode;
+    }
     *sumNenAbility += nenAbility;
     return newNode;
 }
@@ -107,6 +110,9 @@ int findFights(HunterNode *hunter) {
 bool findLife(HunterNode *hunter) {
     if (hunter == nullptr) {
         return false;
+    }
+    if (hunter->parent == nullptr) {
+        return hunter->alive;
     }
     pathCompression(hunter, findRoot(hunter));
     return (hunter->alive && hunter->parent->alive);

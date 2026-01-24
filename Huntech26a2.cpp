@@ -49,27 +49,15 @@ StatusType Huntech::add_squad(int squadId) { // O(log(k))
 
 StatusType Huntech::remove_squad(int squadId) { // O(log(k))
     if (squadId <= 0) {
-        return StatusType::INVALID_INPUT;
+        return StatusType::INVALID_INPUT; // invalid input
     }
     Squad* squadToRemove = squads->find(squadId);
     if (squadToRemove == nullptr) {
-        return StatusType::FAILURE;
+        return StatusType::FAILURE; // squad not in system
     }
-    try {
-        auraSquads->remove(*squadToRemove->getAuraSquad()); // AVL removal
-    }
-    catch (const std::bad_alloc&) {
-        return StatusType::ALLOCATION_ERROR;
-    }
-    try {
-        squads->remove(squadId); // AVL removal
-    }
-    catch (const std::bad_alloc&) {
-        delete squadToRemove;
-        return StatusType::ALLOCATION_ERROR;
-    }
+    auraSquads->remove(*squadToRemove->getAuraSquad()); // AVL removal
     squadToRemove->die();
-    delete squadToRemove;
+    squads->remove(squadId); // AVL removal
     return StatusType::SUCCESS;
 }
 
@@ -87,24 +75,11 @@ StatusType Huntech::add_hunter(int hunterId,
     if(huntersTable->find(hunterId) != nullptr || squadToInsert == nullptr) {
         return StatusType::FAILURE; // hunter already in system or squad not in system
     }
+    HunterNode* hunterToInsert = squadToInsert->addHunter(nenType, fightsHad, aura);
     try {
-        auraSquads->remove(*squadToInsert->getAuraSquad());
+        hunterToInsert = new HunterNode(nenType, fightsHad, nullptr);
     }
     catch (const std::bad_alloc&) {
-        return StatusType::ALLOCATION_ERROR; // memory allocation failed
-    }
-    HunterNode* hunterToInsert;
-    try {
-        hunterToInsert = squadToInsert->addHunter(nenType, fightsHad, aura);
-    }
-    catch (const std::bad_alloc&) {
-        return StatusType::ALLOCATION_ERROR; // memory allocation failed
-    }
-    try {
-        auraSquads->insert(squadToInsert->getAuraSquad(),*squadToInsert->getAuraSquad());
-    }
-    catch (const std::bad_alloc&) {
-        delete hunterToInsert;
         return StatusType::ALLOCATION_ERROR; // memory allocation failed
     }
     try {
@@ -114,6 +89,9 @@ StatusType Huntech::add_hunter(int hunterId,
         delete hunterToInsert;
         return StatusType::ALLOCATION_ERROR; // memory allocation failed
     }
+    auraSquads->remove(*squadToInsert->getAuraSquad());
+    squadToInsert->addHunter(nenType, fightsHad, aura);
+    auraSquads->insert(squadToInsert->getAuraSquad(), *squadToInsert->getAuraSquad());
     return StatusType::SUCCESS;
 }
 
@@ -154,14 +132,14 @@ output_t<int> Huntech::get_squad_experience(int squadId) { // O(log(k))
 }
 
 output_t<int> Huntech::get_ith_collective_aura_squad(int i) { // O(log(k))
-    if (squads->isEmpty() || i < 1) {
+    if (auraSquads->isEmpty() || i < 1) {
         return StatusType::FAILURE; // no squads of invalid input
     }
-    Squad* squad = squads->getIthValue(i);
+    AuraSquad* squad = auraSquads->getIthValue(i);
     if (squad == nullptr) {
         return StatusType::FAILURE; // invalid input
     }
-    return squad->getAuraSquad()->getSquadID();// SUCCESS returned
+    return squad->getSquadID(); // SUCCESS returned
 }
 
 output_t<NenAbility> Huntech::get_partial_nen_ability(int hunterId) { // O(log*(n)) amortized avg
@@ -187,6 +165,11 @@ StatusType Huntech::force_join(int forcingSquadId, int forcedSquadId) {
     if (forcingSquad == nullptr || forcedSquad == nullptr) {
         return StatusType::FAILURE; // squads not in system
     }
+    if (forcingSquad->isEmpty() ||
+       (forcingSquad->getExperience() + forcingSquad->getAuraSquad()->getTotalAura() + forcingSquad->getHunters()->getTotalNenAbility()->getEffectiveNenAbility())
+       <= (forcedSquad->getExperience() + forcedSquad->getAuraSquad()->getTotalAura() + forcedSquad->getHunters()->getTotalNenAbility()->getEffectiveNenAbility())) {
+        return StatusType::FAILURE; // join criteria not matched
+    }
     try {
         auraSquads->remove(*forcingSquad->getAuraSquad());
     }
@@ -205,15 +188,6 @@ StatusType Huntech::force_join(int forcingSquadId, int forcedSquadId) {
     }
     catch (const std::bad_alloc&) {
         return StatusType::ALLOCATION_ERROR; // memory allocation failed
-    }
-    if (!joined) {
-        try {
-            auraSquads->insert(forcedSquad->getAuraSquad(),*forcedSquad->getAuraSquad());
-        }
-        catch (const std::bad_alloc&) {
-            return StatusType::ALLOCATION_ERROR; // memory allocation failed
-        }
-        return StatusType::FAILURE; // join criteria not matched
     }
     try {
         squads->remove(forcedSquadId);
