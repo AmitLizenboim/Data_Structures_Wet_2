@@ -3,8 +3,13 @@
 //
 #include "Squad.h"
 
-Squad::Squad(int squadID) : auraSquad(new AuraSquad(squadID)), experience(0), hunters(new ReverseTree()) {}
+Squad::Squad(int squadID) : auraSquad(new AuraSquad(squadID)), experience(0), hunters(new ReverseTree()) {
 
+Squad::~Squad() {
+    delete auraSquad;
+    delete hunters;
+}
+>>>>>>> 6b9a2500c53fbcbc1fd0e0a08731e539836cf9ce
 bool Squad::operator<(int key) {
     return auraSquad->getSquadID() < key;
 }
